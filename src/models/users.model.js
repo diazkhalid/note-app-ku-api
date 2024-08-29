@@ -20,4 +20,13 @@ async function createUser(username, password, roleId) {
     return result.rows[0];
 }
 
-module.exports = { checkUsernameAvailability, createUser }
+async function getUsersByUsername(username) {
+    const query = {
+        text: 'SELECT us.*, r.title as "role" FROM users us LEFT JOIN roles r ON us.role_id = r.id WHERE username = $1',
+        values: [username]
+    };
+    const result = await pool.query(query);
+    return result.rows[0];
+}
+
+module.exports = { checkUsernameAvailability, createUser, getUsersByUsername }
